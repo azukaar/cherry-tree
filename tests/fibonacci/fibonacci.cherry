@@ -1,0 +1,13 @@
+import system :
+    puts,
+    sum
+
+Fib limit, a, b :
+    if limit > 1 :
+        sum fib limit-1, b, a + b
+    else :
+       b
+
+Start :
+    puts fib 10, 0, 1
+ 
