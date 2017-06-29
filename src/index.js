@@ -8,7 +8,13 @@ import Compiler from './compiler';
 
 export default class CherryTree {
     runFile(input) {
-        const code = fs.readFileSync(path.join(process.cwd(), input), 'utf8');
+        let code;
+        if(path.isAbsolute(input)) {
+            code = fs.readFileSync(input, 'utf8');
+        }
+        else {  
+            code = fs.readFileSync(path.join(process.cwd(), input), 'utf8');
+        }
         process.chdir(path.join(process.cwd(), input, '..'));
 
         let result = new Compiler(code).run() + "start();"; 
