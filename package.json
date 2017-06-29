@@ -1,11 +1,11 @@
 {
   "name": "cherry-tree",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node -e ./src/index.js",
+    "start": "babel-node ./src/index.js",
     "build": "babel src --out-dir dist"
   },
   "bin": {

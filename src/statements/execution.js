@@ -35,7 +35,7 @@ export default class ExecutionStatement {
 
             if(testBody.test()) {
                 const body = testBody.run(Object.assign({}, context));
-                return (`return ${functionName}(${body});`);
+                return (`return ${functionName}${body};`);
             }
             else {
                 return (`return ${functionName}();`);

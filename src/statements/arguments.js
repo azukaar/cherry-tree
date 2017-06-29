@@ -8,7 +8,7 @@ export default class ArgumentsStatement {
     }
 
     test() {
-        if(this.command.match(/^([a-z0-9\>\s](\s?,?\s?))+/)) {
+        if(this.command.match(/^\(\s*([a-z0-9\>\<\+\-\=\"\s](\s?,?\s?))+/)) {
             return true;
         }
     }

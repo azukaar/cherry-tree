@@ -6,7 +6,7 @@ export default class TokenStatement {
     }
 
     test() {
-        if(this.command.match(/^[a-z0-9]+$/)) {
+        if(this.command.match(/^[a-z0-9]+$/) || this.command.match(/^\".*\"$/) ) {
             return true;
         }
     }
