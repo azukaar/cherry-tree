@@ -8,14 +8,14 @@ export default class FunctionStatement {
     }
 
     test() {
-        if(this.command.match(/([A-Z][a-z]+)\s*((?:[a-z][a-zA-Z]*\s*,?\s*)*)/)) {
+        if(this.command.match(/([A-Z][a-z]+)\s*((?:[a-z][a-zA-Z0-9\=]*\s*,?\s*)*)/)) {
             
             return true;
         }
     }
 
     run(context = {}) {
-        const match = this.command.match(/([A-Z][a-z]+)\s*((?:[a-z][a-zA-Z]*\s*,?\s*)*)/);
+        const match = this.command.match(/([A-Z][a-z]+)\s*((?:[a-z][0-9a-zA-Z\=]*\s*,?\s*)*)/);
         
         if(match) {
             let functionName = match[1].replace(/^([A-Z][a-z]+)/, e => e.toLowerCase());
