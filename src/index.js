@@ -8,17 +8,20 @@ import Compiler from './compiler';
 
 export default class CherryTree {
     runFile(input) {
+        const originalDir = process.cwd();
         let code;
         if(path.isAbsolute(input)) {
             code = fs.readFileSync(input, 'utf8');
+            process.chdir(path.join(input, '..'));
         }
         else {  
             code = fs.readFileSync(path.join(process.cwd(), input), 'utf8');
+            process.chdir(path.join(process.cwd(), input, '..'));
         }
-        process.chdir(path.join(process.cwd(), input, '..'));
 
-        let result = new Compiler(code).run() + "start();"; 
+        let result = new Compiler(code).run() + "start();";
 
-        eval(babel.transform(result, { "presets": ["es2015"] }).code);
+        return result;
+        process.chdir(originalDir);
     }
 }
