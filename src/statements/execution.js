@@ -9,36 +9,42 @@ export default class ExecutionStatement {
     }
 
     test() {
-        if(this.command.match(/^([a-z][a-z0-9]+)\s+(.*)/) || this.command.match(/^(else)/)) {
+        if(this.command.match(/^([a-z][a-z0-9]+)\s*(.*)\s*\:?/)) {
             return true;
         }
     }
 
     run(context) {
-        const match = this.command.match(/^([a-z][a-z0-9]+)\s+(.*)/) || this.command.match(/^(else)/);
+        const match = this.command.match(/^([a-z][a-z0-9]+)\s*(.*)\s*\:?/);
 
         if(match) {
             let functionName = match[1];
             let argumentsList = match[2];
 
             if(functionName == "if") {
-                const body = new Compiler(""+this.children).run(Object.assign({}, context));
-                return (`${functionName}(${argumentsList}) {${body}}`);
+                const body = new Compiler(this.children).run(Object.assign({}, context));
+                return (`${functionName}${argumentsList} {${body}}`);
             }
 
             else if (functionName == "else") {
-                const body = new Compiler(""+this.children).run(Object.assign({}, context));
+                const body = new Compiler(this.children).run(Object.assign({}, context));
                 return (`${functionName} {${body}}`);
             }
 
-            const testBody = new ArgumentsStatement(argumentsList);
+            else if(this.children) {
+                const body = new Compiler(this.children).run(Object.assign({ isChildren : true }, context));
 
-            if(testBody.test()) {
-                const body = testBody.run(Object.assign({}, context));
-                return (`return ${functionName}${body};`);
+                return (`${context.isChildren? '' : '__result += '}${functionName}(${argumentsList ? argumentsList+',' : ''} ${body})`);
+            }
+
+            const testArguments = new ArgumentsStatement(argumentsList);
+
+            if(testArguments.test()) {
+                const argumentsList = testArguments.run(Object.assign({}, context));
+                return (`${context.isChildren? '' : '__result += '}${functionName}${argumentsList}${context.isChildren? '' : ';'}`);
             }
             else {
-                return (`return ${functionName}();`);
+                return (`${context.isChildren? '' : '__result += '}${functionName}()${context.isChildren? '' : ';'}`);
             }
         }
     }

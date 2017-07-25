@@ -1,0 +1,8 @@
+import html :
+    div
+    button
+    render
+
+Start :
+    render :
+        button("myButton", "button", "Hey yoo")

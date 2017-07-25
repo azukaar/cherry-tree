@@ -4,6 +4,7 @@ const fs   = require('fs');
 const path = require('path');
 var args = require('args');
 var babel = require("babel-core");
+
 import Compiler from './compiler';
 
 export default class CherryTree {
@@ -19,9 +20,9 @@ export default class CherryTree {
             process.chdir(path.join(process.cwd(), input, '..'));
         }
 
-        let result = new Compiler(code).run() + "start();";
+        let result = babel.transform(new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
 
-        return result;
         process.chdir(originalDir);
+        return result;
     }
 }
