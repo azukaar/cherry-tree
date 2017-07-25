@@ -25,4 +25,8 @@ export default class CherryTree {
         process.chdir(originalDir);
         return result;
     }
+
+    run(code) {
+        returnbabel.transform(new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
+    }
 }
