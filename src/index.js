@@ -27,6 +27,6 @@ export default class CherryTree {
     }
 
     run(code) {
-        returnbabel.transform(new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
+        return babel.transform(new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
     }
 }
