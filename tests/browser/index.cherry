@@ -6,3 +6,4 @@ import html :
 Start :
     render :
         button("myButton", "button", "Hey yoo")
+        button("myButton", "button", "Hey yoo 2")

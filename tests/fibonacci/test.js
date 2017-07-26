@@ -1,1 +1,0 @@
-import {puts} from 'cherry-module-system';function fib(limit, a=0, b=1) {if((limit > 1)) {return fib(limit - 1, b, a + b);}else {return b;}};function start() {return puts("result is " + fib (10) + "\n");};start();

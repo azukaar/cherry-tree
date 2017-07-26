@@ -19,7 +19,7 @@ export default class TokenStatement {
             return `__result += ${this.command+""};`;
         }
         else {
-         return `__result += ${this.command};`;
+            return `__result += ${this.command};`;
         }
     }
 }

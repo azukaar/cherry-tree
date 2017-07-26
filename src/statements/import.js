@@ -21,7 +21,7 @@ export default class ImportStatement {
         const match = this.command.match(/^import (.+)/);
         if(match) {
             const fileName = match[1];
-            return `import {${this.children.split(" ").join(",")}} from 'cherry-module-${fileName}';`;
+            return `import {${this.children.join(",")}} from 'cherry-module-${fileName}';`;
         }
         else {
 

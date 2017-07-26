@@ -6,7 +6,12 @@ import statements from './statements.js';
 export default class Compiler {
 
     constructor(code) {
-        this.code = code;
+        this.code = (typeof code !== "object" && code.split("\n").length > 1) ?  this.hackToArray(code) : code;
+    }
+
+    hackToArray(code) {
+        code = code.replace(/^ +\w/gmi, (e) => e.slice(0, -1) + " - " + e.slice(-1))
+        return code
     }
 
     run(context = {}, lineNumberInit = 0) {
@@ -21,7 +26,31 @@ export default class Compiler {
                 doc = this.code;
             }
 
-            if(typeof doc === "object") {
+            if(doc instanceof Array) {
+                let lineNumber = lineNumberInit, result = [];
+
+                for (let node in doc)  {
+                    lineNumber++;
+                    if(node.replace(/\s/g, "") != "") {
+                        let compiler = new Compiler(doc[node]);
+                        result.push(compiler.run(context));
+                    }
+                };
+
+                let final = result.shift();
+                for(let r in result) {
+                    let res = result[r];
+                    if(res.match(/^if/) || res.match(/^else/)) {
+                        final += result.shift();
+                    }
+                    else {
+                        final += " + " + result.shift();
+                    }
+                }
+                
+                return final;
+            }
+            else if(typeof doc === "object") {
                 let lineNumber = lineNumberInit, result = '';
 
                 for (let node in doc)  {

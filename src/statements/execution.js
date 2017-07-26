@@ -32,7 +32,9 @@ export default class ExecutionStatement {
             }
 
             else if(this.children) {
-                const body = new Compiler(this.children).run(Object.assign({ isChildren : true }, context));
+                let body = new Compiler(this.children).run(Object.assign({ isChildren : true }, context));
+
+                if(body.slice(-1) == "+") body = body.slice(0, -1);
 
                 return (`${context.isChildren? '' : '__result += '}${functionName}(${argumentsList ? argumentsList+',' : ''} ${body})`);
             }
