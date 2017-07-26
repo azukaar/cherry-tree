@@ -8,26 +8,20 @@ export default class FunctionStatement {
     }
 
     test() {
-        if(this.command.match(/(#[A-Z][a-z\.]+)\s*((?:[a-z][a-zA-Z0-9\=]*\s*,?\s*)*)/)) {
-            
+        if(this.command.match(/__SENSOR__\s*?([a-zA-Z0-9\=\|\\\#\.\s])+/)) {
             return true;
         }
     }
 
     run(context = {}) {
-        const match = this.command.match(/(#[A-Z][a-z\.]+)\s*((?:[a-z][0-9a-zA-Z\=]*\s*,?\s*)*)/);
+        const match = this.command.match(/__SENSOR__\s*?([a-zA-Z0-9\=\|\\\#\.\s]+)/);
+        console.log(match)
+        let regexAssociated = match[1];
         
+        const body = new Compiler(this.children).run(Object.assign({}, context));
+
         if(match) {
-            let functionName = match[1].replace(/^([A-Z][a-z]+)/, e => e.toLowerCase());
-            let funcContext = match[2]
-                    .split(",")
-                    .filter(e => e != '')
-                    .map(e => e.replace(/\s/g, ""))
-                    .map(e => {return {"name" : e}});
-
-            const body = new Compiler(this.children).run(Object.assign({}, context, funcContext));
-
-            return (`function event_${functionName}(${funcContext.map(e => e.name).join(', ')}) {${body}};`);
+            return 'cherry__addSensor(/'+regexAssociated.replace(/ /, '')+'/, function() { '+body+' } );';
         }
     }
 }

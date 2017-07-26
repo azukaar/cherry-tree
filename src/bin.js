@@ -13,6 +13,7 @@ args
 
 const flags = args.parse(process.argv);
 
+const baseCode = fs.readFileSync(path.join(__dirname, 'baseCode.js'));
 
 if(!flags.input) {
     console.error("Error no input file (see --help).");
@@ -32,7 +33,7 @@ else {
 
 import Compiler from './compiler';
 
-let result = new Compiler(code).run() + "start();"; 
+let result = baseCode + new Compiler(code).run() + "start();"; 
 
 if(((flags.output || flags.stdio) && flags.es5)) {
     result = babel.transform(result, { "presets": ["es2015"] }).code;

@@ -5,6 +5,8 @@ const path = require('path');
 var args = require('args');
 var babel = require("babel-core");
 
+const baseCode = fs.readFileSync(path.join(__dirname, 'baseCode.js'));
+
 import Compiler from './compiler';
 
 export default class CherryTree {
@@ -20,13 +22,13 @@ export default class CherryTree {
             process.chdir(path.join(process.cwd(), input, '..'));
         }
 
-        let result = babel.transform(new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
+        let result = babel.transform(baseCode + new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
 
         process.chdir(originalDir);
         return result;
     }
 
     run(code) {
-        return babel.transform(new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
+        return babel.transform(baseCode + new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
     }
 }

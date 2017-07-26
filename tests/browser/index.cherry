@@ -3,6 +3,9 @@ import html :
     button
     render
 
+@ myButton\.onclick :
+    render("ok")
+
 Start :
     render :
         button("myButton", "button", "Hey yoo")

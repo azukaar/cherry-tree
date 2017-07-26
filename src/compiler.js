@@ -11,6 +11,7 @@ export default class Compiler {
 
     hackToArray(code) {
         code = code.replace(/^ +\w/gmi, (e) => e.slice(0, -1) + " - " + e.slice(-1))
+        code = code.replace(/^@/gmi, (e) => "__SENSOR__")
         return code
     }
 
