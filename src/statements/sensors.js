@@ -21,7 +21,7 @@ export default class FunctionStatement {
         const body = new Compiler(this.children).run(Object.assign({}, context));
 
         if(match) {
-            return 'cherry__addSensor(/'+regexAssociated.replace(/ /, '')+'/, function() { '+body+' } );';
+            return `cherry__addSensor(/${regexAssociated.replace(/ /, '')}/, function {let __result = ""; ${body}; return __result; })`;
         }
     }
 }
