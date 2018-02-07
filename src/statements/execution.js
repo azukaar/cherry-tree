@@ -3,9 +3,10 @@ import ArgumentsStatement from './arguments';
 import Compiler from './../compiler';
 
 export default class ExecutionStatement {
-    constructor(command, children) {
+    constructor(command, children, target) {
         this.command = command;
         this.children = children;
+        this.target = target;
     }
 
     test() {
@@ -22,24 +23,24 @@ export default class ExecutionStatement {
             let argumentsList = match[2];
 
             if(functionName == "if") {
-                const body = new Compiler(this.children).run(Object.assign({}, context));
+                const body = new Compiler(this.children, this.target).run(Object.assign({}, context));
                 return (`${functionName}${argumentsList} {${body}}`);
             }
 
             else if (functionName == "else") {
-                const body = new Compiler(this.children).run(Object.assign({}, context));
+                const body = new Compiler(this.children, this.target).run(Object.assign({}, context));
                 return (`${functionName} {${body}}`);
             }
 
             else if(this.children) {
-                let body = new Compiler(this.children).run(Object.assign({ isChildren : true }, context));
+                let body = new Compiler(this.children, this.target).run(Object.assign({ isChildren : true }, context));
 
                 if(body.slice(-1) == "+") body = body.slice(0, -1);
 
                 return (`${context.isChildren? '' : '__result += '}${functionName}(${argumentsList ? argumentsList+',' : ''} ${body})`);
             }
 
-            const testArguments = new ArgumentsStatement(argumentsList);
+            const testArguments = new ArgumentsStatement(argumentsList, null, this.target);
 
             if(testArguments.test()) {
                 const argumentsList = testArguments.run(Object.assign({}, context));

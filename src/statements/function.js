@@ -2,9 +2,10 @@
 import Compiler from './../compiler';
 
 export default class FunctionStatement {
-    constructor(command, children) {
+    constructor(command, children, target) {
         this.command = command;
         this.children = children;
+        this.target = target;
     }
 
     test() {
@@ -25,9 +26,16 @@ export default class FunctionStatement {
                     .map(e => e.replace(/\s/g, ""))
                     .map(e => {return {"name" : e}});
 
-            const body = new Compiler(this.children).run(Object.assign({}, context, funcContext));
+            let funArg = funcContext.map(e => e.name).join(', ');
+            const body = new Compiler(this.children, this.target).run(Object.assign({}, context, funcContext));
+            const states = body.match(/this\.[a-zA-Z0-9]+/g);
+            const statesArg = states ? states.join(', ') : '';
+            const statesArgObj = states ? states.map(e => `"${e.split('this.')[1]}" : JSON.parse(${e})`).join(', ') : '';
+            
+            if(states && states.length > 0 && funArg.length > 0) funArg += ', '
 
-            return (`function ${functionName}(${funcContext.map(e => e.name).join(', ')}) {let __result = ""; ${body}; return __result; };`);
+            // TODO : add hoisting 
+            return `"${functionName}'" : (${funArg}) => CherryStem.bind(this)('${functionName}', {${funArg}${statesArgObj}}, () => {let __result = ""; ${body}; return __result;}),`;
         }
     }
 }

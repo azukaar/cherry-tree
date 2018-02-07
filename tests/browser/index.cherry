@@ -3,9 +3,10 @@ import html :
     button
     render
 
-@ myButton\.onclick :
-    render("ok")
+$message : "Hey Click Me !!"
+
+#myButton\.onclick : 
+    $message : "Clicked"
 
 Start :
-    render :
-        button("myButton", "button", "Hey yoo")
+    button("myButton", "button", $message)

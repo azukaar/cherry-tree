@@ -2,9 +2,10 @@
 import Compiler from './../compiler';
 
 export default class FunctionStatement {
-    constructor(command, children) {
+    constructor(command, children, target) {
         this.command = command;
         this.children = children;
+        this.target = target;
     }
 
     test() {
@@ -17,10 +18,10 @@ export default class FunctionStatement {
         const match = this.command.match(/__SENSOR__\s*?([a-zA-Z0-9\=\|\\\#\.\s]+)/);
         let regexAssociated = match[1];
         
-        const body = new Compiler(this.children).run(Object.assign({}, context));
+        const body = new Compiler(this.children, this.target).run(Object.assign({}, context));
 
         if(match) {
-            return `cherry__addSensor(/${regexAssociated.replace(/ /, '')}/, function() {let __result = ""; ${body}; return __result; });`;
+            return `new CherrySensor(/${regexAssociated.replace(/ /, '')}/, (event) => {${body}; Start(this)}),`;
         }
     }
 }

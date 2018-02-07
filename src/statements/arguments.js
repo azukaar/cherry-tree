@@ -1,10 +1,12 @@
 
 import ExecutionStatement from './execution';
+import StateStatement from './state';
 
 export default class ArgumentsStatement {
-    constructor(command, children) {
+    constructor(command, children, target) {
         this.command = command;
         this.children = children;
+        this.target = target;
     }
 
     test() {
@@ -14,13 +16,15 @@ export default class ArgumentsStatement {
     }
 
     run(context) {
-        const execTest = new ExecutionStatement(this.command);
+        const execTest = new ExecutionStatement(this.command, null, this.target);
+        const stateTest = new StateStatement(this.command, null, this.target);
 
         if(execTest.test()) {
             return execTest.run(Object.assign({}, context)).replace(/;$/, ",").replace(/^return /, "");
         }
         else {
-            return this.command;
+            //TEMP REPLACE
+            return this.command.replace(/\$/, 'this.');
         }
     }
 }

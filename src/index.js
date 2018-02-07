@@ -5,12 +5,13 @@ const path = require('path');
 var args = require('args');
 var babel = require("babel-core");
 
-const baseCode = fs.readFileSync(path.join(__dirname, 'baseCode.js'));
-
 import Compiler from './compiler';
 
+const getTarget = (t) => t.match(/^cherry-target\-/) ? t : 'cherry-target-' + t;
+
 export default class CherryTree {
-    runFile(input) {
+    runFile(input, target = 'node-terminal') {
+        const baseCode = `const {Start, CherrySensor, CherryStem, CherryComponent} = require('${getTarget(target)}');\n`;
         const originalDir = process.cwd();
         let code;
         if(path.isAbsolute(input)) {
@@ -22,13 +23,14 @@ export default class CherryTree {
             process.chdir(path.join(process.cwd(), input, '..'));
         }
 
-        let result = babel.transform(baseCode + new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
+        let result = babel.transform(baseCode + new Compiler(code, require(getTarget(target))).run() + "Start(new Main());", { "presets": ["es2015"] }).code;
 
         process.chdir(originalDir);
         return result;
     }
 
-    run(code) {
-        return babel.transform(baseCode + new Compiler(code).run() + "start();", { "presets": ["es2015"] }).code;
+    run(code, target = 'node-terminal') {
+        const baseCode = `const {Start, CherrySensor, CherryStem, CherryComponent} = require('${getTarget(target)}');\n`;
+        return babel.transform(baseCode + new Compiler(code, require(getTarget(target))).run() + "Start(new Main());", { "presets": ["es2015"] }).code;
     }
 }

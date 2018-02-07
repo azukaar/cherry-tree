@@ -1,11 +1,7 @@
-import system :
-    puts
-
 Fib limit, a=0, b=1 :
     if (limit > 1) :
        fib (limit - 1, b, a + b)
     else :
        b
 
-Start :
-    puts ("result is " + fib (10) + "\n")
+Start : "result is ${fib (10)} \n"

@@ -1,0 +1,28 @@
+import "target-node-console" :
+    subscribeConsoleInput
+
+#consoleInput :
+    if (!hasWon) :
+        $numberTries++
+        $numberInput = event
+        if (hasWon) : fire('restart', 1000)
+
+#restart :
+    $numberTries = 0
+    $numberInput = nil
+    randomNumber.invalidate
+
+HasWon :
+    $numberInput == randomNumber
+    
+RandomNumber :
+    js : return parseInt(Math.random()*6) + 1;
+
+TestNumber :
+    if (hasWon) : "You won"
+    else : "Try again (${$numberTries} tries)"
+
+Start :
+    subscribeConsoleInput
+    if (!$numberTries) : "Hello, type a number between 1 and 6"
+    else : testNumber

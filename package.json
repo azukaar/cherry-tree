@@ -1,6 +1,6 @@
 {
   "name": "cherry-tree",
-  "version": "0.6.2",
+  "version": "0.7.6",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -23,7 +23,9 @@
     "js-yaml": "^3.8.4",
     "node-yaml": "^3.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "cherry-target-node-terminal": "^0.0.3"
+  },
   "files": [
     "dist"
   ]

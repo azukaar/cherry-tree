@@ -5,9 +5,10 @@ const path = require('path');
 import Compiler from './../compiler';
 
 export default class ImportStatement {
-    constructor(command, children) {
+    constructor(command, children, target) {
         this.command = command;
         this.children = children;
+        this.target = target;
     }
 
     test() {

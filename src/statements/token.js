@@ -3,13 +3,19 @@ const isNumeric = function(n) {
 }
 
 export default class TokenStatement {
-    constructor(command, children) {
+    constructor(command, children, target) {
         this.command = command;
         this.children = children;
+        this.target = target;
     }
 
     test() {
-        if(this.command.match(/^[a-z0-9]+$/) || this.command.match(/^\".*\"$/)  || isNumeric(this.command) ) {
+        if(this.command.match(/^\".*\"$/) ) {
+            this.command.replace(/^"/, '`')
+            this.command.replace(/"$/, '`')
+            return true
+        }
+        if(this.command.match(/^[a-z0-9]+$/) || isNumeric(this.command) ) {
             return true;
         }
     }
